@@ -1,0 +1,174 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12 bg-info p-3">
+                    <h1>Camile Joy V. Dela Cruz</h1>
+                </div>
+            </div>
+            <div class="row mx-auto mt-3">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <button class="btn btn-outline-info btn-lg hvr-grow" (click)="addUserModal(addUser)">Add New User
+                            <span><i class="fa fa-plus"></i></span>
+                    </button>
+                    <!-- <table mdbTable hover="true" class="mt-2"> 
+                        <col width="200"> 
+                        <col width="200"> 
+                        <col width="300"> 
+                        <thead class="black white-text">
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users">
+                                <td class="text-light">{{user.name}}</td>
+                                <td class="text-light">{{user.age}}</td>
+                                <td>
+                                    <button class="btn btn-outline-warning btn-md mr-3 hvr-grow" (click)="editUserModal(editUser, user._id)">Edit
+                                        <span><i class="fa fa-edit"></i></span>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-md hvr-buzz" (click)="deleteModal(del, user._id)">Delete
+                                        <span><i class="fa fa-trash"></i></span>
+                                    </button>   
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> -->
+
+                    <table mdbTable #tableEl="mdbTable" class="z-depth-1" hover="true"> 
+                            <col width="200"> 
+                            <col width="200"> 
+                            <col width="300">
+                        <thead class="black white-text">
+                            <tr>
+                                <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users; let i = index">
+                                <th class="text-light" *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+                                    scope="row">{{user.name}}</th>
+                                <td class="text-light" *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{user.age}}</td>
+                                <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+                                    <button class="btn btn-outline-warning btn-md mr-3 hvr-grow" (click)="editUserModal(editUser, user._id)">Edit
+                                        <span><i class="fa fa-edit"></i></span>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-md hvr-buzz" (click)="deleteModal(del, user._id)">Delete
+                                        <span><i class="fa fa-trash"></i></span>
+                                    </button>   
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="grey lighten-5 w-100">
+                            <tr>
+                                <td colspan="4">
+                                    <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="users"></mdb-table-pagination>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #addUser let-modal>
+    <div class="modal-header bg-info">
+        <h4 class="modal-title">Add User</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click'); myform.reset()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="myform">
+            <div class="md-form form-md form-group">
+                <input mdbInput type="text" id="form1" [ngClass]="{
+                    'border-bottom border-danger': name.invalid && (name.dirty || name.touched),
+                    'border-bottom border-success': name.valid && (name.dirty || name.touched)
+                }" class="form-control form-control-md" formControlName="name" [(ngModel)]="addname" name="addname" required>
+                <label for="form1" class="">Name</label>
+                <div class="form-control-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+                    <small *ngIf="name.errors.required" class="text-danger">**Required</small>
+                </div>
+            </div>
+            <div class="md-form form-md form-group">
+                <input mdbInput type="text" id="form2" [ngClass]="{
+                    'border-bottom border-danger': age.invalid && (age.dirty || age.touched),
+                    'border-bottom border-success': age.valid && (age.dirty || age.touched)
+                }" class="form-control form-control-md" formControlName="age" [(ngModel)]="addage" name="addage" required>
+                <label for="form2" class="">Age</label>
+                <div class="form-control-feedback" *ngIf="age.errors && (age.dirty || age.touched)">
+                    <small *ngIf="age.errors.required" class="text-danger">**Required</small>
+                </div>
+            </div>
+            <button [hidden]="!myform.valid" mdbBtn block="true" type="button" color="info" class="form-control p-1 mb-1" (click)="addNewUser(deletedModal)" mdbWavesEffect><h3>Add</h3></button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #editUser let-modal>
+    <div class="modal-header bg-warning">
+        <h4 class="modal-title">Edit User</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="myform">
+            <div class="md-form form-md">
+                <input mdbInput type="text" id="form1" [ngClass]="{
+                    'border-bottom border-danger': name.invalid && (name.dirty || name.touched),
+                    'border-bottom border-success': name.valid && (name.dirty || name.touched)
+                }" class="form-control form-control-md" formControlName="name" [(ngModel)]="edtname" name="edtname" required>
+                <label for="form1" class="">Name</label>
+                <div class="form-control-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+                    <small *ngIf="name.errors.required" class="text-danger">**Required</small>
+                </div>
+            </div>
+            <div class="md-form form-md">
+                <input mdbInput type="text" id="form2" [ngClass]="{
+                    'border-bottom border-danger': age.invalid && (age.dirty || age.touched),
+                    'border-bottom border-success': age.valid && (age.dirty || age.touched)
+                }" class="form-control form-control-md" formControlName="age" [(ngModel)]="edtage" name="edtage" required>
+                <label for="form2" class="">Age</label>
+                <div class="form-control-feedback" *ngIf="age.errors && (age.dirty || age.touched)">
+                    <small *ngIf="age.errors.required" class="text-danger">**Required</small>
+                </div>
+            </div>
+            <button [hidden]="!myform.valid" mdbBtn type="button" color="warning" outline="true" (click)="editNewUser(deletedModal)" class="form-control p-1 mb-1" mdbWavesEffect><h3>Save</h3></button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #del let-modal>
+    <div class="modal-header bg-danger text-light">
+        <h5 class="modal-title">Are you sure you want to delete?</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body d-flex justify-content-center">
+        <button type="button" (click)="deleteSeed(deletedModal)" class="btn btn-danger hvr-buzz">OK</button>
+    </div>
+</ng-template>
+
+<ng-template #deletedModal let-modal>
+    <div class="modal-header bg-danger">
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body d-flex justify-content-center" [ngSwitch]="action">
+        <h5 class="modal-title" *ngSwitchCase="'delete'">Record successfully deleted!</h5>
+        <h5 class="modal-title" *ngSwitchCase="'update'">Record successfully Updated!</h5>
+        <h5 class="modal-title" *ngSwitchCase="'add'">Record successfully Added!</h5>
+        <h5 class="modal-title" *ngSwitchCase="'exist'">User Name Already Exists!</h5>
+    </div>
+</ng-template>
+<router-outlet></router-outlet>
